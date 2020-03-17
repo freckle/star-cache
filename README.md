@@ -83,11 +83,12 @@ stack install
 
 ```console
 % star-cache --help
-Usage: star-cache [--verbose] (-b|--bucket ARG) [-p|--prefix ARG]
+Usage: star-cache [--verbose] [-P|--pigz] (-b|--bucket ARG) [-p|--prefix ARG]
                   ((-k|--key VALUE) | (-c|--checksum-file PATH) |
                     (-C|--checksum-list PATH)) COMMAND
 
 Available options:
+  -P,--pigz                Use pigz compression
   -b,--bucket ARG          S3 bucket name
   -p,--prefix ARG          S3 prefix (default: "")
   -k,--key VALUE           Set the cache key to VALUE
