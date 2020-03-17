@@ -71,13 +71,12 @@ Will:
 ## Installation
 
 ```console
-git clone http://github.com/freckle/star-cache
-cd star-cache
-stack install
-~/.local/bin/star-cache --help
+curl -L https://github.com/freckle/star-cache/releases/download/$VERSION/star-cache-$VERSION-linux-x86_64.tar.gz | tar -xzf -
+chmod +x star-cache
 ```
 
-**TODO**: Binaries hosted via GitHub Releases.
+**NOTE**: Binaries are built on Ubuntu 18.04; they'll only run on a system with
+`GLIBC_2.27`.
 
 ## Usage
 
