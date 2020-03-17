@@ -27,7 +27,7 @@ lint:
 	stack exec $(STACK_ARGUMENTS) hlint .
 	stack exec $(STACK_ARGUMENTS) weeder .
 
-RELEASE_TAG ?= v$(shell sed '/^version: \(.*\)$/!d; s//\1/' package.yaml)
+RELEASE_TAG ?= $(shell sed '/^version: \(.*\)$$/!d; s//v\1/' package.yaml)
 RELEASE_OS_NAME ?= linux
 
 .PHONY: release.build
