@@ -1,0 +1,23 @@
+resolver: lts-15.3
+
+extra-deps:
+  - amazonka-s3-streaming-1.1.0.0@sha256:96ee28b13de78a991aa3aa7f91107c8588d7fbe9a71a76caf2cf963cffacdcf4,2651
+
+# NB. -fignore-optim-changes can get in the way of profiling projects. To build
+# for profiling, consider using a separate .stack-work directory or reversing
+# the flag using `fno-ignore-optim-changes`.
+ghc-options:
+  "$locals":
+    -ddump-to-file
+    -ddump-hi
+    -fhide-source-paths
+    -Weverything
+    -Wno-missed-specialisations
+    -Wno-all-missed-specialisations
+    -Wno-unsafe
+    -Wno-safe
+    -Wno-missing-local-signatures
+    -Wno-monomorphism-restriction
+    -Wno-missing-import-lists
+    -Wno-implicit-prelude
+    -fignore-optim-changes

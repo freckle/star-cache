@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+#
+# Builds an executable via Docker, in an Ubuntu 18.04 image. This ensures we
+# have the same libraries as where we typically run CI.
+#
+# This build is cached in ./build/.stack{,-work}.
+#
+###
+set -eu
+
+pkg=star-cache
+exe=star-cache
+srcs=(
+  executables
+  library
+  package.yaml
+  stack.yaml
+  stack.yaml.lock
+)
+
+out=${1:-./$exe}
+
+docker_args=(
+  run --rm --interactive --tty --workdir /build
+  --volume "$PWD"/build/.stack:/root/.stack
+  --volume "$PWD"/build/.stack-work:/build/.stack-work
+  --volume "$PWD"/build/out:/build/out
+)
+
+for src in "${srcs[@]}"; do
+  docker_args+=(--volume "$PWD/$src:/build/$src:ro")
+done
+
+docker "${docker_args[@]}" quay.io/haskell_works/stack-build-minimal \
+  stack build "$pkg:$exe" --pedantic --copy-bins --local-bin-path /build/out
+
+cp -v "build/out/$exe" "$out"

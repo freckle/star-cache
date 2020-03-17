@@ -1,3 +1,6 @@
 *.cabal
 *.prof
 .stack-work*
+star-cache.tar.gz
+build/*
+!build/.gitkeep

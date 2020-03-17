@@ -1,0 +1,9 @@
+- package:
+  - name: star-cache
+  - section:
+    - name: test:spec
+    - message:
+      - name: Weeds exported
+      - module:
+        - name: SpecHelper
+        - identifier: putTestAppLog

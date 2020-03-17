@@ -1,0 +1,65 @@
+version: 2
+
+references:
+  stack_build: &stack_build
+    docker:
+      - image: quay.io/haskell_works/stack-build-minimal
+    steps:
+      - checkout
+      - run:
+          name: Install star-cache
+          command: |
+            curl -L "$STAR_CACHE_SRC" | tar -xzf -
+            chmod +x star-cache
+          environment:
+            STAR_CACHE_SRC: https://github.com/freckle/star-cache/releases/download/master/star-cache-master-linux-x86_64.tar.gz
+      - run:
+          name: Install pigz
+          command: |
+            apt-get update -y
+            apt-get install -y pigz
+      - run:
+          name: Restore cache
+          command: |
+            ./star-cache \
+              --bucket freckle-ci-cache \
+              --prefix star-cache \
+              --checksum-list <(git ls-files) \
+              --pigz \
+              restore --pointer "$CIRCLE_BRANCH" --pointer master
+      - run:
+          name: Upgrade Stack
+          command: stack upgrade
+      - run:
+          name: Dependencies
+          command: make setup
+      - run:
+          name: Build
+          command: make build
+      - run:
+          name: Save cache
+          command: |
+            ./star-cache \
+              --bucket freckle-ci-cache \
+              --prefix star-cache \
+              --checksum-list <(git ls-files) \
+              --pigz \
+              store --pointer "$CIRCLE_BRANCH" ~/.stack ./.stack-work
+      - run:
+          name: Lint
+          command: make lint
+      - run:
+          name: Test
+          command: make test
+
+jobs:
+  build:
+    <<: *stack_build
+    environment:
+      STACK_ARGUMENTS: --no-terminal
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - build

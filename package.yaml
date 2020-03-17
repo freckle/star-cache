@@ -1,0 +1,69 @@
+name: star-cache
+version: 0.1.0.0
+
+dependencies:
+  - base
+  - rio
+  - rio-orphans
+
+default-extensions:
+  - BangPatterns
+  - DataKinds
+  - DeriveAnyClass
+  - DeriveFoldable
+  - DeriveFunctor
+  - DeriveGeneric
+  - DeriveLift
+  - DeriveTraversable
+  - DerivingStrategies
+  - FlexibleContexts
+  - FlexibleInstances
+  - GADTs
+  - GeneralizedNewtypeDeriving
+  - LambdaCase
+  - MultiParamTypeClasses
+  - NoImplicitPrelude
+  - NoMonomorphismRestriction
+  - OverloadedStrings
+  - RankNTypes
+  - RecordWildCards
+  - ScopedTypeVariables
+  - StandaloneDeriving
+  - TypeApplications
+  - TypeFamilies
+
+library:
+  source-dirs: library
+  dependencies:
+    - amazonka
+    - amazonka-core
+    - amazonka-s3
+    - amazonka-s3-streaming
+    - conduit
+    - conduit-extra
+    - lens
+    - optparse-applicative
+    - pureMD5
+    - resourcet
+    - typed-process
+
+executables:
+  star-cache:
+    main: Main.hs
+    source-dirs: executables
+    ghc-options: -threaded -O2 "-with-rtsopts=-N -T -I0"
+    dependencies:
+      - star-cache
+
+tests:
+  spec:
+    main: Main.hs
+    source-dirs: tests
+    ghc-options: -threaded -rtsopts -O0 "-with-rtsopts=-N"
+    dependencies:
+      - bytestring
+      - cereal
+      - conduit
+      - hspec
+      - hspec-expectations-lifted
+      - star-cache

@@ -1,0 +1,9 @@
+restylers:
+  - brittany
+  - stylish-haskell
+
+comments: false
+
+labels:
+  - restyled
+  - pullassigner-ignore
