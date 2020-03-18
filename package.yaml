@@ -39,6 +39,7 @@ library:
     - amazonka-core
     - amazonka-s3
     - amazonka-s3-streaming
+    - bytestring
     - conduit
     - conduit-extra
     - lens
