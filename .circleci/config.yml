@@ -12,7 +12,7 @@ references:
             curl -L "$STAR_CACHE_SRC" | tar -xzf -
             chmod +x star-cache
           environment:
-            STAR_CACHE_SRC: https://github.com/freckle/star-cache/releases/download/v0.1.0.0/star-cache-v0.1.0.0-linux-x86_64.tar.gz
+            STAR_CACHE_SRC: https://github.com/freckle/star-cache/releases/download/v0.1.0.1/star-cache-v0.1.0.1-linux-x86_64.tar.gz
       - run:
           name: Install pigz
           command: |
