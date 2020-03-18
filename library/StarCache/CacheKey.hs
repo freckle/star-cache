@@ -3,9 +3,6 @@ module StarCache.CacheKey
   , resolveCacheKey
   , Checksum
   , checksumToText
-  , textToChecksum
-  , checksumToLbs
-  , lbsToChecksum
   )
 where
 
@@ -33,15 +30,6 @@ resolveCacheKey = \case
 
 newtype Checksum = Checksum { checksumToText :: Text }
   deriving newtype Show
-
-textToChecksum :: Text -> Checksum
-textToChecksum = Checksum
-
-checksumToLbs :: Checksum -> BSL.ByteString
-checksumToLbs = BSL.fromStrict . encodeUtf8 . checksumToText
-
-lbsToChecksum :: BSL.ByteString -> Checksum
-lbsToChecksum = Checksum . decodeUtf8With lenientDecode . BSL.toStrict
 
 checksum :: BSL.ByteString -> Checksum
 checksum = Checksum . pack . show . md5
