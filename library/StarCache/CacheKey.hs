@@ -23,13 +23,13 @@ instance IsString CacheKey where
 resolveCacheKey :: MonadIO m => CacheKey -> m Checksum
 resolveCacheKey = \case
   CacheKey x -> pure $ Checksum x
-  ChecksumFile path -> checksum <$> BSL.readFile path
+  ChecksumFile path -> checksum <$> readFileBinary path
   ChecksumFileList path -> do
     paths <- lines . unpack <$> readFileUtf8 path
-    checksum . mconcat <$> traverse BSL.readFile paths
+    checksum . mconcat <$> traverse readFileBinary paths
 
 newtype Checksum = Checksum { checksumToText :: Text }
   deriving newtype Show
 
-checksum :: BSL.ByteString -> Checksum
-checksum = Checksum . pack . show . md5
+checksum :: ByteString -> Checksum
+checksum = Checksum . pack . show . md5 . BSL.fromStrict
