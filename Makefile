@@ -60,9 +60,9 @@ release.github:
 .PHONY: release
 release: release.build release.tag release.github
 
-.PHONY: release.master
-release.master: RELEASE_TAG=master
-release.master: release.build release.github
+.PHONY: release.dev
+release.dev: RELEASE_TAG=dev
+release.dev: release.build release.github
 
 .PHONY: clean
 clean:
