@@ -14,6 +14,7 @@ import Conduit hiding (sinkTempFile)
 import Control.Exception.Lens (handling_)
 import Control.Monad.Trans.AWS (AWST')
 import Control.Monad.Trans.Resource (liftResourceT)
+import Control.Retry (RetryPolicyM, retryPolicyDefault, retrying)
 import Network.AWS
 import Network.AWS.Data.Body (RsBody(..))
 import Network.AWS.S3 hiding (URL, bucket)
@@ -55,6 +56,10 @@ getStoreS3 env bucket key = runAWS env $ do
     $ transPipe liftResourceT (resp ^. gorsBody ^. to _streamBody)
     .| sinkStarCacheTempFile
 
+-- | Store the archive file on S3 at the given bucket and key
+--
+-- This operation retries up to 5 times with a 0.05s delay.
+--
 putStoreS3
   :: HasResourceMap env
   => Env
@@ -66,7 +71,8 @@ putStoreS3 env bucket key tmp = do
   let cmu = createMultipartUpload bucket key
 
   result <-
-    runAWS env
+    retryingEither retryPolicyDefault
+    $ runAWS env
     $ runConduit
     $ sourceStarCacheTempFile tmp
     .| streamUpload Nothing cmu
@@ -91,3 +97,8 @@ unBucketName (BucketName b) = b
 
 unObjectKey :: ObjectKey -> Text
 unObjectKey (ObjectKey k) = k
+
+-- | 'retrying' an action that returns 'Either' on 'Left's
+retryingEither
+  :: MonadIO m => RetryPolicyM m -> m (Either e a) -> m (Either e a)
+retryingEither policy = retrying policy (const $ pure . isLeft) . const

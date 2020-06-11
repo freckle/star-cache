@@ -46,6 +46,7 @@ library:
     - optparse-applicative
     - pureMD5
     - resourcet
+    - retry
     - typed-process
 
 executables:
