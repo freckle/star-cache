@@ -1,3 +1,6 @@
+**NOTE**: We ran into issues with unexpected cache invalidation, and have solved
+our problems using native caching mechinisms. This project has been Archived.
+
 # \*cache
 
 A tool for caching intermediate build artifacts, with named pointers.
